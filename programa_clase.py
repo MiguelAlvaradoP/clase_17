@@ -1,7 +1,7 @@
 import csv
 def obtener_fichero_calificaciones():
     lista = []
-    with open(r"C:\Users\cetecom\Documents\calificaciones.csv", "r", newline="") as archivo:
+    with open(r"calificaciones.csv", "r", newline="") as archivo:
         lector_csv = csv.reader(archivo, delimiter=";")
         pos = 0
         for linea in lector_csv:
@@ -29,38 +29,50 @@ def obtener_fichero_calificaciones():
                    'Ordinario2': Ordinario2,
                    'Practicas': Practicas,
                    'OrdinarioPracticas': OrdinarioPracticas,
-                })    
+                })        
             else:
-                pos = 1    
-    return lista
+               pos = 1  
+        print("es lista",lista)
+        input()
+
+        return lista
 
 
 def añadir_nota_final(calificaciones):
-        if alumno['Ordinario1']: #Si el alumno se ha presentado al examen de repesca del primer parcial tomamos esa nota como la nota del primer parcial
-            parcial1 = nota(alumno['Ordinario1'])
-        elif alumno['Parcial1']:
-            parcial1 = nota(alumno['Parcial1'])
-        else: # No se ha presentado al primer parcial ni a la repesca en el ordinario
-            parcial1 = 0
-        if alumno['Ordinario2']: #Si el alumno se ha presentado al examen de repesca del segundo parcial tomamos esa nota como la nota del segundo parcial
-            parcial2 = nota(alumno['Ordinario2'])
-        elif alumno['Parcial2']:
-            parcial2 = nota(alumno['Parcial2'])
-        else: # No se ha presentado al segundo parcial ni a la repesca en el ordinario
-            parcial2 = 0 
-        if alumno['OrdinarioPracticas']: #Si el alumno se ha presentado al examen de repesca de prácticas tomamos esa nota como la nota de prácticas
-            practicas = nota(alumno['OrdinarioPracticas'])
-        elif alumno['Practicas']:
-            practicas = nota(alumno['Practicas'])
-        else:
-            practicas = 0
-        alumno['Final1'] = parcial1
-        alumno['Final2'] = parcial2
-        alumno['FinalPracticas'] = practicas
-        alumno['NotaFinal'] = parcial1 * 0.3 + parcial2 * 0.3 + practicas * 0.4
-        return alumno
+        lista=[]
+        for alumno in calificaciones:
+            if alumno['Ordinario1'] > 0: #Si el alumno se ha presentado al examen de repesca del primer parcial tomamos esa nota como la nota del primer parcial
+                parcial1 = alumno['Ordinario1']
+            else:
+                parcial1 = alumno['Parcial2']
+            if alumno['Ordinario2'] > 0: #Si el alumno se ha presentado al examen de repesca del segundo parcial tomamos esa nota como la nota del segundo parcial
+                parcial2 = alumno['Ordinario2']
+            else:
+                parcial2 = alumno['Parcial2']
+            if alumno['OrdinarioPracticas'] > 0: #Si el alumno se ha presentado al examen de repesca de prácticas tomamos esa nota como la nota de prácticas
+                practicas = alumno['OrdinarioPracticas']
+            else:
+                practicas= alumno['Practicas']
+            alumno_Final1 = parcial1
+            alumno_Final2 = parcial2
+            alumno_FinalPracticas= practicas
+            alumno_NotaFinal = parcial1 * 0.3 + parcial2 * 0.3 + practicas * 0.4
+            alumno_apellidos=alumno["Apellidos"]
+            alumno_nombre=alumno["nombre"]
+            alumno_asistencia=alumno["Asistencia"]
+            lista.append({
+                   'Apellidos':alumno_apellidos,
+                   'nombre':alumno_nombre,
+                   'Asistencia': alumno_asistencia,
+                   'Parcial1': alumno_Final1,
+                   'Parcial2': alumno_Final2,
+                   'Practicas': alumno_FinalPracticas,
+                   "notaFinal":alumno_NotaFinal
+                })    
+        return lista
 
 
 
 calificacion = obtener_fichero_calificaciones()
-añadir_nota_final(calificacion)
+calificacion2=añadir_nota_final(calificacion)
+print(calificacion2)
